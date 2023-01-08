@@ -1,0 +1,115 @@
+var BestHouse = /** @class */ (function () {
+    function BestHouse() {
+    }
+    BestHouse.main = function (args) {
+        console.info("enter the size of buildings : ");
+        var sc = new java.util.Scanner(java.lang.System["in"]);
+        var size = sc.nextInt();
+        var req = (function (s) { var a = []; while (s-- > 0)
+            a.push(null); return a; })(size);
+        BestHouse.fillArray(req);
+        console.info("enter the number of blocks : ");
+        var blockSize = sc.nextInt();
+        var block = (function (dims) { var allocate = function (dims) { if (dims.length === 0) {
+            return null;
+        }
+        else {
+            var array = [];
+            for (var i = 0; i < dims[0]; i++) {
+                array.push(allocate(dims.slice(1)));
+            }
+            return array;
+        } }; return allocate(dims); })([blockSize, size]);
+        BestHouse.fillBlock(req, block);
+        console.info(BestHouse.getIndexOfBestBuilding(block));
+    };
+    BestHouse.getIndexOfBestBuilding = function (block) {
+        var ans = (function (s) { var a = []; while (s-- > 0)
+            a.push(0); return a; })(block.length);
+        var building = -1;
+        var minDist = 2147483647;
+        for (var i = 0; i < block.length; i++) {
+            {
+                for (var j = 0; j < block[0].length; j++) {
+                    {
+                        var dist = 0;
+                        if (!block[i][j]) {
+                            if (i > 0 && i < block.length - 1) {
+                                dist = Math.min(BestHouse.getMinDist(block, i, j, false), BestHouse.getMinDist(block, i, j, true));
+                                ans[i] = Math.max(ans[i], dist);
+                            }
+                            else if (i === 0) {
+                                dist = BestHouse.getMinDist(block, i, j, false);
+                            }
+                            else {
+                                dist = BestHouse.getMinDist(block, i, j, true);
+                            }
+                        }
+                        ans[i] = Math.max(ans[i], dist);
+                    }
+                    ;
+                }
+                if (ans[i] < minDist) {
+                    minDist = ans[i];
+                    building = i;
+                }
+            }
+            ;
+        }
+        console.info(java.util.Arrays.toString(ans));
+        return building;
+    };
+    BestHouse.getMinDist = function (block, i, j, bool) {
+        if (bool) {
+            for (var ind = i; ind >= 0; ind--) {
+                {
+                    if (block[ind][j]) {
+                        return i - ind;
+                    }
+                }
+                ;
+            }
+        }
+        else {
+            for (var ind = i; ind < block.length; ind++) {
+                {
+                    if (block[ind][j]) {
+                        return ind - i;
+                    }
+                }
+                ;
+            }
+        }
+        return 2147483647;
+    };
+    BestHouse.fillBlock = function (req, block) {
+        for (var i = 0; i < block.length; i++) {
+            {
+                for (var j = 0; j < block[0].length; j++) {
+                    {
+                        console.info("enter whether " + req[j] + " is present in : " + (i + 1) + "th block or not : ");
+                        var sc = new java.util.Scanner(java.lang.System["in"]);
+                        var bool = sc.nextBoolean();
+                        block[i][j] = bool;
+                    }
+                    ;
+                }
+            }
+            ;
+        }
+    };
+    BestHouse.fillArray = function (arr) {
+        for (var i = 0; i < arr.length; i++) {
+            {
+                console.info("enter the :" + i + " th building name : ");
+                var sc = new java.util.Scanner(java.lang.System["in"]);
+                var building = sc.nextLine();
+                arr[i] = building;
+            }
+            ;
+        }
+    };
+    return BestHouse;
+}());
+BestHouse["__class"] = "BestHouse";
+BestHouse.main(null);
